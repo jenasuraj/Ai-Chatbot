@@ -1,22 +1,25 @@
 'use client'
-
+import axios from 'axios'
 import React, { useState } from 'react'
 
 const Section1 = () => {
   const [messages, setMessages] = useState([])
   const [input, setInput] = useState("")
 
-  const handleSend = () => {
-    if (input.trim() !== "") {
-      setMessages([...messages, input])
-      setInput("")
-    }
+const handleSend = async () => {
+  if (input.trim() !== "") {
+    const response = await axios.post('http://127.0.0.1:8000/', { input });
+    console.log(response.data); 
+    setMessages([...messages, input]);
+    setInput("");
   }
+}
+
 
   return (
     <>
       <section className="bg-black w-3/5 h-screen flex flex-col">
-        {/* Scrollable message area */}
+      
         <div className="flex-1 overflow-y-auto p-4 text-white space-y-2 ">
           {messages.map((msg, index) => (
             <div key={index} className="bg-gray-800 p-2 rounded-md w-fit max-w-xl">
@@ -25,7 +28,6 @@ const Section1 = () => {
           ))}
         </div>
 
-       
         <div className="p-4   flex">
           <input
             type="text"
@@ -36,6 +38,7 @@ const Section1 = () => {
             onKeyDown={(e) => e.key === 'Enter' && handleSend()}
           />
         </div>
+
       </section>
     </>
   )
